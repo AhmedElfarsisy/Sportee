@@ -18,25 +18,21 @@ struct LeagueDetailResponse {
 // MARK: - League
 struct LeagueDetail {
     let idLeague: String
-    let idSoccerXML: NSNull
-    let idAPIfootball, strSport, strLeague, strLeagueAlternate: String
-    let strDivision, idCup, strCurrentSeason, intFormedYear: String
-    let dateFirstEvent, strGender, strCountry, strWebsite: String
-    let strFacebook, strTwitter, strYoutube: String
-    let strRSS: String
+    let strSport, strLeague: String
+    let dateFirstEvent,  strCountry : String
+    let  strYoutube: String
     let strDescriptionEN: String
-    let strDescriptionDE: NSNull
-    let strDescriptionFR: String
-    let strDescriptionIT, strDescriptionCN, strDescriptionJP, strDescriptionRU: NSNull
-    let strDescriptionES: String
-    let strDescriptionPT, strDescriptionSE, strDescriptionNL, strDescriptionHU: NSNull
-    let strDescriptionNO, strDescriptionPL, strDescriptionIL: NSNull
-    let strFanart1, strFanart2, strFanart3, strFanart4: String
-    let strBanner: String
-    let strBadge, strLogo: String
-    let strPoster: String
-    let strTrophy: String
-    let strNaming, strComplete, strLocked: String
-    
+    let strBadge:String
+	    
+    init(idLeague: String, strLeague: String, strSport: String, strBadge: String, strCountry: String, dateFirstEvent :String , strYoutube:String,  strDescriptionEN:String) {
+        self.idLeague = idLeague
+        self.strLeague = strLeague
+        self.strSport = strSport
+        self.strBadge = strBadge
+        self.strCountry = strCountry
+        self.dateFirstEvent = dateFirstEvent
+        self.strYoutube = strYoutube
+        self.strDescriptionEN = strDescriptionEN
+    }
     
 }
