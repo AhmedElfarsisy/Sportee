@@ -7,3 +7,9 @@
 //
 
 import Foundation
+ 
+protocol  HomePresenterProtocol {
+    //var sportsRepo :SportsRepoProtocol?
+    func featchSports()
+    func attachView (view : SportsViewController)
+}
