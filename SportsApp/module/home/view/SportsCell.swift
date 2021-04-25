@@ -15,4 +15,6 @@ class SportsCell: UICollectionViewCell {
     
     @IBOutlet weak var sportsName: UILabel!
     
+    
+    
 }

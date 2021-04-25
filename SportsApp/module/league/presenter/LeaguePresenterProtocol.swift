@@ -7,3 +7,8 @@
 //
 
 import Foundation
+
+protocol LeaguePresenterProtocol {
+    func featchLeagues(name :String)
+      func attachView (view : LeaguesViewController)
+}

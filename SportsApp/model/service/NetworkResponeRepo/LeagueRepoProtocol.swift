@@ -10,5 +10,5 @@ import Foundation
 
 protocol LeagueRepoProtocol {
     
-     func getLeagues(sportName: String , completionHandler :@escaping([League]?) -> Void , onFailure : @escaping (String)-> Void)
+     func getLeagues(sportName: String , completionHandler :@escaping([League]?) -> Void , onFailure : @escaping (String)-> Void) ->Void
 }

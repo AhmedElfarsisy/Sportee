@@ -7,3 +7,10 @@
 //
 
 import Foundation
+
+protocol  FavoritePresenterProtocol {
+    //var sportsRepo :SportsRepoProtocol?
+    func featchfavorits()
+    func attachView (view : FavoritsViewController)
+}
+

@@ -7,14 +7,15 @@
 //
 
 import UIKit
+import SDWebImage
 
 private let reuseIdentifier = "sportsCell"
 
-class SportsViewController   : UIViewController {
+class SportsViewController   : UIViewController ,SportsViewControllerProtocol {
+    
     
     @IBOutlet weak var sportsCollictionView: UICollectionView!
     
-    @IBOutlet weak var sportsImage: UIImageView!
     var sportsList : [Sport]?{
         didSet {
             presenter?.updateSportsView {
@@ -30,13 +31,10 @@ class SportsViewController   : UIViewController {
         super.viewDidLoad()
         sportsCollictionView.delegate = self
         sportsCollictionView.dataSource = self
+        
         self.mangeDependancies()
         presenter?.attachView(view: self)
         presenter?.featchSports()
-        
-        //        for item in sportsList! {
-        //            print(item.strSport)
-        //        }
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -47,15 +45,16 @@ class SportsViewController   : UIViewController {
         // Do any additional setup after loading the view.
     }
     
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using [segue destinationViewController].
-     // Pass the selected object to the new view controller.
-     }
-     */
+    
+    // MARK: - Navigation
+    
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//
+//        // Get the new view controller using [segue destinationViewController].
+//        // Pass the selected object to the new view controller.
+//    }
+    
     
     func mangeDependancies()  {
         let apiRequest = APIRequest.instance
@@ -71,11 +70,11 @@ class SportsViewController   : UIViewController {
     
 }
 
-extension SportsViewController : UICollectionViewDataSource , UICollectionViewDelegate {
+extension SportsViewController : UICollectionViewDataSource , UICollectionViewDelegate ,UICollectionViewDelegateFlowLayout{
     
     
     // MARK: UICollectionViewDataSource
-    
+
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
@@ -83,18 +82,51 @@ extension SportsViewController : UICollectionViewDataSource , UICollectionViewDe
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of items
+        
         return sportsList?.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! SportsCell
         
         //cell.sportsImage
+        let imageUrl = sportsList?[indexPath.row].strSportThumb
+        cell.sportsImage!.sd_setImage(with: URL(string:imageUrl!), placeholderImage: UIImage(named: "sport.png"))
+        cell.backgroundColor = UIColor.systemBlue
         cell.sportsName.text = sportsList?[indexPath.row].strSport
         
         return cell
     }
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+//        return UIEdgeInsets.zero
+//    }
+//
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let cellWidth = (UIScreen.main.bounds.width / 2.0 )-5
+        let cellHight = UIScreen.main.bounds.height / 3.0
+        return CGSize(width: cellWidth, height: cellHight)
+
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        let size = CGSize(width: 0, height: 2)
+        return size
+    }
+
+    //to make a proper footer
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        let size = CGSize(width: 0, height: 2)
+        return size
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let leagueViewController = storyBoard.instantiateViewController(withIdentifier: "leagueViewController") as! LeaguesViewController
+        leagueViewController.sportName = sportsList?[indexPath.row].strSport
+        self.present(leagueViewController, animated: true, completion: nil)
+    }
+    
     
     // MARK: UICollectionViewDelegate
     
@@ -112,18 +144,5 @@ extension SportsViewController : UICollectionViewDataSource , UICollectionViewDe
      }
      */
     
-    /*
-     // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-     override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
-     return false
-     }
-     
-     override func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
-     return false
-     }
-     
-     override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
-     
-     }
-     */
+    
 }

@@ -7,3 +7,16 @@
 //
 
 import Foundation
+
+class FavoritePresenter: FavoritePresenterProtocol {
+    var view :FavoritsViewController?
+    func featchfavorits() {
+        //featch from db
+    }
+    
+    func attachView(view: FavoritsViewController) {
+        self.view = view
+    }
+    
+    
+}
