@@ -23,7 +23,6 @@ class LeaguesViewController: UIViewController , UITableViewDelegate , UITableVie
         }
     }
     
-    
     @IBOutlet weak var leaguesTable: UITableView!
     
     override func viewDidLoad() {
@@ -79,9 +78,22 @@ class LeaguesViewController: UIViewController , UITableViewDelegate , UITableVie
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "LeagueCell", for: indexPath) as! LeaguesCell
         cell.leagueName.text = leaguesList![indexPath.row].strLeague
+        cell.leagueImage.layer.cornerRadius = cell.leagueImage.frame.width / 2.0
+
+        //(cell.leagueImage.layer.width / 2.0 )
+        let imageUrl = leaguesList?[indexPath.row].strBadge
+        cell.leagueImage!.sd_setImage(with: URL(string:imageUrl!), placeholderImage: UIImage(named: "sport.png"))
         return cell
     }
     
+    
+   
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let leagueDetailsViewController = storyBoard.instantiateViewController(withIdentifier: "leagueDetailsViewController") as! LeagueDetailsViewController
+        leagueDetailsViewController.leagueId = leaguesList?[indexPath.row].idLeague
+        self.present(leagueDetailsViewController, animated: true, completion: nil)
+    }
     
     
     
@@ -95,4 +107,6 @@ class LeaguesViewController: UIViewController , UITableViewDelegate , UITableVie
 extension LeaguesViewController  {
     
     
+    
+  
 }

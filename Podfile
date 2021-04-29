@@ -8,6 +8,8 @@ target 'SportsApp' do
   # Pods for SportsApp
 	pod 'Alamofire', '~> 4.0'
 	pod 'SwiftyJSON', '~> 4.0'
+	pod 'RxSwift', '~> 5'
+    	pod 'RxCocoa', '~> 5'
 	pod 'SDWebImage', :modular_headers => true
 
 end

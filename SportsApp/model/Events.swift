@@ -12,11 +12,11 @@ struct Events  {
     //	let strLeague : String?
     //	let strSeason : String?
     //	let strDescriptionEN : String?
-    //	let strHomeTeam : String?
-    //	let strAwayTeam : String?
-    //	let intHomeScore : String?
+    	let strHomeTeam : String?
+    	let strAwayTeam : String?
+    	let intHomeScore : String?
     //	let intRound : String?
-    //	let intAwayScore : String?
+    	let intAwayScore : String?
     //	let intSpectators : String?
     //	let strOfficial : String?
     //	let strHomeGoalDetails : String?
@@ -54,7 +54,7 @@ struct Events  {
     //	let strPoster : String?
     //	let strSquare : String?
     //	let strFanart : String?
-    //	let strThumb : String?
+    	let strThumb : String?
     //	let strBanner : String?
     //	let strMap : String?
     //	let strTweet1 : String?
@@ -65,6 +65,7 @@ struct Events  {
     //	let strPostponed : String?
     //	let strLocked : String?
 //
+    
 //    enum CodingKeys: String, CodingKey {
 //
 //        case idEvent = "idEvent"

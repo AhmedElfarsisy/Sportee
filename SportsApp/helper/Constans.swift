@@ -34,7 +34,7 @@ class Constants {
     
     public static let UPCOMING_EVENTS_URL :String =
     "https://www.thesportsdb.com/api/v1/json/1/eventsround.php?id="
-    public static let UPCOMING_EVENTS_URI = "&r=38&s=2020-2021"
+    public static let UPCOMING_EVENTS_URI = "&r=10&s=2020-2021"
     
     public static let LATESTRESULT_URL = "https://www.thesportsdb.com/api/v1/json/1/eventspastleague.php?id="
     
@@ -63,6 +63,11 @@ class Constants {
     static let strEvent = "strEvent"
     static let strDateEvent = "dateEvent"
     static let strTimeEvent = "strTime"
+    static let strAwayTeam = "strAwayTeam"
+    static let strHomeTeam = "strHomeTeam"
+    static let strThumb = "strThumb"
+    static let intHomeScore = "intHomeScore"
+    static let intAwayScore = "intAwayScore"
     
     //Teams
     static let TEAMS = "teams"

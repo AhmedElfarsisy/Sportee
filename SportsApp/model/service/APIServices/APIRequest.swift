@@ -14,8 +14,8 @@ import  SwiftyJSON
 class APIRequest :APIRequestProtocol  {
     
     static let instance = APIRequest()
-     
-     private init (){}
+    
+    private init (){}
     
     func getSports( completionHandler :@escaping([Sport]?) -> Void , onFailure : @escaping (String)-> Void)  {
         var sportsList = [Sport]()
@@ -92,23 +92,29 @@ class APIRequest :APIRequestProtocol  {
         
         let url = Constants.UPCOMING_EVENTS_URL+id+Constants.UPCOMING_EVENTS_URI
         print(url)
-        print("https://www.thesportsdb.com/api/v1/json/1/eventsround.php?id=4328&r=10&s=2020-2021")
+        //        print("https://www.thesportsdb.com/api/v1/json/1/eventsround.php?id=4328&r=10&s=2020-2021")
         var eventssArray = [Events]()
         Alamofire.request(url).response { response in
             
             if let data = response.data {
                 
                 let json = JSON(data)
-                //  print("JSON: \(json)")
+                
                 let events = json[Constants.EVENTS].arrayValue
                 
                 for event in events {
                     let id = event[Constants.idEvent].stringValue
-                    
                     let name = event[Constants.strEvent].stringValue
                     let date = event[Constants.strDateEvent].stringValue
                     let time = event[Constants.strTimeEvent].stringValue
-                    var eventObj = Events(idEvent: id, strEvent: name, dateEvent: date, strTime: time)
+                    let thumb = event[Constants.strThumb].stringValue
+                    let strHomeTeam = event[Constants.strHomeTeam].stringValue
+                    let strAwayTeam = event[Constants.strAwayTeam].stringValue
+                    
+                 
+                    
+                    var eventObj = Events(idEvent: id, strEvent: name,strHomeTeam: strHomeTeam ,strAwayTeam: strAwayTeam, intHomeScore: "", intAwayScore: "", dateEvent: date, strTime: time, strThumb: thumb)
+                    
                     //eventObj.str
                     eventssArray.append(eventObj)
                     
@@ -133,21 +139,27 @@ class APIRequest :APIRequestProtocol  {
             if let data = response.data {
                 
                 let json = JSON(data)
-                //  print("JSON: \(json)")
+                
                 let latestResults = json[Constants.EVENTS].arrayValue
                 
                 for result in latestResults {
+                    // var eventCurrent :Events = Events()
                     let id = result[Constants.idEvent].stringValue
                     
                     let name = result[Constants.strEvent].stringValue
+                    
                     let date = result[Constants.strDateEvent].stringValue
                     let time = result[Constants.strTimeEvent].stringValue
+                    let thumb = result[Constants.strThumb].stringValue
                     
-                    //                         let intHomeScore = result[Constants.strTimeEvent].int
-                    //                         let intAwayScore = result[Constants.strTimeEvent].stringValue
-                    var eventObj = Events(idEvent: id, strEvent: name, dateEvent: date, strTime: time)
-                    //eventObj.str
-                    latestResultsList.append(eventObj)
+                    let intHomeScore = result[Constants.intHomeScore].stringValue
+                    let intAwayScore = result[Constants.intAwayScore].stringValue
+                    
+                    let strHomeTeam = result[Constants.strHomeTeam].stringValue
+                    let strAwayTeam = result[Constants.strAwayTeam].stringValue
+                    var event = Events(idEvent: id, strEvent: name,strHomeTeam: strHomeTeam,strAwayTeam: strAwayTeam, intHomeScore: intHomeScore, intAwayScore: intAwayScore, dateEvent: date, strTime: time, strThumb: thumb)
+                    
+                    latestResultsList.append(event)
                     
                     
                     print("latest events"+date)

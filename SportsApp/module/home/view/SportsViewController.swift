@@ -67,7 +67,9 @@ class SportsViewController   : UIViewController ,SportsViewControllerProtocol {
         presenter?.sportsRepo = sportsRepo
         
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        sportsCollictionView.reloadData()
+    }
 }
 
 extension SportsViewController : UICollectionViewDataSource , UICollectionViewDelegate ,UICollectionViewDelegateFlowLayout{
@@ -93,7 +95,8 @@ extension SportsViewController : UICollectionViewDataSource , UICollectionViewDe
         //cell.sportsImage
         let imageUrl = sportsList?[indexPath.row].strSportThumb
         cell.sportsImage!.sd_setImage(with: URL(string:imageUrl!), placeholderImage: UIImage(named: "sport.png"))
-        cell.backgroundColor = UIColor.systemBlue
+        cell.sportsImage.layer.cornerRadius = 10 
+        //cell.backgroundColor = UIColor.systemBlue
         cell.sportsName.text = sportsList?[indexPath.row].strSport
         
         return cell
@@ -105,20 +108,19 @@ extension SportsViewController : UICollectionViewDataSource , UICollectionViewDe
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let cellWidth = (UIScreen.main.bounds.width / 2.0 )-5
-        let cellHight = UIScreen.main.bounds.height / 3.0
+        let cellHight = UIScreen.main.bounds.height / 5.0
         return CGSize(width: cellWidth, height: cellHight)
-
     }
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        let size = CGSize(width: 0, height: 2)
-        return size
-    }
-
-    //to make a proper footer
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        let size = CGSize(width: 0, height: 2)
-        return size
-    }
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+//        let size = CGSize(width: 0, height: 2)
+//        return size
+//    }
+//
+//    //to make a proper footer
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+//        let size = CGSize(width: 0, height: 2)
+//        return size
+//    }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)

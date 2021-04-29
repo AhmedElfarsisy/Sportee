@@ -7,3 +7,18 @@
 //
 
 import Foundation
+
+protocol LeagueDetailPresenterProtocol {
+    func featchUpcomingEvents(id : String )
+    func featchLastResult(id : String )
+    func featchTeams(id : String )
+    func attachView (view : LeagueDetailsViewController)
+    
+    func updateLeagueDetailsView(reloader : ()-> Void)
+    var view: LeagueDetailsViewController? {get
+        set
+    }
+    var leagueDetailsRepo :LeagueDetailsRepoProtocol? {get
+        set
+    }
+}
