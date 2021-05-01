@@ -12,114 +12,106 @@ class FavoritsViewController: UIViewController {
     
     @IBOutlet weak var favoritCollictionView: UICollectionView!
     
-    
     var error : String?
     
     var presenter :FavoritePresenterProtocol?
     
-    var sportsList : [Sport]?{
+    public  var leaguesList : [League]?{
         didSet {
-            //presenter?.updateSportsView {
-            print("Sports list did set")
-            favoritCollictionView.reloadData()
+            presenter?.updateFavoritView{
+                favoritCollictionView.reloadData()
+                
             }
         }
-    
-    
-    
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         favoritCollictionView.delegate = self
         favoritCollictionView.dataSource = self
         self.mangeDependancies()
         presenter?.attachView(view: self)
-        sportsList = Array<Sport>()
-        sportsList?.append(Sport(idSpor: 5, strSport: "Soccer", strFormat: "", strSportThumb: "", strSportThumbGreen: "String", strSportDescription: "String"))
         
-          sportsList?.append(Sport(idSpor: 6, strSport: "Soccer", strFormat: "", strSportThumb: "", strSportThumbGreen: "String", strSportDescription: "String"))
-        //presenter?.featchSports()
-        
-        //        for item in sportsList! {
-        //            print(item.strSport)
-        //        }
-        
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-        
-        // Register cell classes
-        //        self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-        
-        // Do any additional setup after loading the view.
     }
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using [segue destinationViewController].
-     // Pass the selected object to the new view controller.
-     }
-     */
     
     func mangeDependancies()  {
-//        let apiRequest = APIRequest.instance
-//
-//        let remoteDataSource = RemoteDataSource( apiRequest: apiRequest)
-//
-//        let sportsRepo = SportsRepo(remoteDataSource: remoteDataSource)
-        
         presenter = FavoritePresenter()
-        //presenter?.sportsRepo = sportsRepo
-        
     }
+    
     
 }
 
-extension FavoritsViewController : UICollectionViewDataSource , UICollectionViewDelegate {
+extension FavoritsViewController : UICollectionViewDataSource , UICollectionViewDelegate ,UICollectionViewDelegateFlowLayout{
     
     
     // MARK: UICollectionViewDataSource
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of items
-        return sportsList?.count ?? 0
+        return leaguesList?.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "favoritCell", for: indexPath) as! FavoritCell
         
-        //cell.sportsImage
-        let imageUrl = sportsList?[indexPath.row].strSportThumb
+        let imageUrl = leaguesList?[indexPath.row].strBadge
         cell.favoritImage!.sd_setImage(with: URL(string:imageUrl!), placeholderImage: UIImage(named: "sport.png"))
-        
-        cell.favoritName.text = sportsList?[indexPath.row].strSport
-        
+        cell.favoritImage.layer.cornerRadius = cell.favoritImage.frame.width / 2.0
+        cell.favoritName.text = leaguesList?[indexPath.row].strLeague
+        //cell.league = leaguesList?[indexPath.row]
+        //cell.index = indexPath.row
+        cell.showAlerts = {
+            self.showAlert(index:indexPath.row )
+        }
+        cell.url = leaguesList![indexPath.row].strYoutube ?? ""
+        NotificationCenter.default.addObserver(self, selector: #selector(displayNoLink), name: NSNotification.Name(rawValue: "displayNoLink"), object: nil)
+        //favoritCollictionView.reloadData()
         return cell
     }
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets.zero
+    @objc func displayNoLink(){
+        let alert : UIAlertController = UIAlertController(title: "Alert", message: "Sorry! Link Not Found", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+            print("ok")
+        }))
+        self.present(alert, animated: true, completion: nil)
     }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
-    }
-    
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cellWidth = UIScreen.main.bounds.width / 2.0
-        let cellHight = UIScreen.main.bounds.height / 5.0
+        let cellWidth = (UIScreen.main.bounds.width )
+        let cellHight = UIScreen.main.bounds.height / 10.0
         return CGSize(width: cellWidth, height: cellHight)
     }
     
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let leagueDetailsViewController = storyBoard.instantiateViewController(withIdentifier: "leagueDetailsViewController") as! LeagueDetailsViewController
+        leagueDetailsViewController.leagueId = leaguesList?[indexPath.row].idLeague
+        leagueDetailsViewController.league = leaguesList?[indexPath.row]
+        self.present(leagueDetailsViewController, animated: true, completion: nil)
+    }
+    
+         func showAlert(index : Int) {
+             let alert : UIAlertController = UIAlertController(title: "Delete?", message: "Do you want to delete this legue", preferredStyle: .alert)
+             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+                self.presenter?.deleteLeague(league: self.leaguesList![index])
+                     self.favoritCollictionView.reloadData()
+                     print("ok")
+             }))
+             alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
+                 print("Cancel")
+             }))
+    
+           self.present(alert, animated: true, completion: nil)
+         }
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        leaguesList = presenter?.featchfavorits()
+        favoritCollictionView.reloadData()
+    }
+        
 }

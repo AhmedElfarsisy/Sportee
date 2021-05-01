@@ -21,9 +21,7 @@ struct League {
     let strLeague : String
     let strBadge :String
     let strYoutube: String
-    
     let strDivision: String
-    
 //    let idLeague, strLeague: String
 //    let strSport: StrSport
 //    let strLeagueAlternate: String?

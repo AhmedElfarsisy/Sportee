@@ -9,24 +9,6 @@
 import Foundation
 
 class Constants {
-    
-    // MARK: Ahmed
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     // MARK: Hanan
     public static let SPORTS_URL:String = "https://www.thesportsdb.com/api/v1/json/1/all_sports.php"
     

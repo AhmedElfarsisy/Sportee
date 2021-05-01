@@ -12,6 +12,8 @@ protocol LeagueDetailPresenterProtocol {
     func featchUpcomingEvents(id : String )
     func featchLastResult(id : String )
     func featchTeams(id : String )
+    func addLeague(league:League)
+    func deletLeague(league:League)  
     func attachView (view : LeagueDetailsViewController)
     
     func updateLeagueDetailsView(reloader : ()-> Void)

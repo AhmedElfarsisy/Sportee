@@ -182,13 +182,11 @@ class APIRequest :APIRequestProtocol  {
         let url = "https://www.thesportsdb.com/api/v1/json/1/lookup_all_teams.php?id="+id
         var teamsList = [Teams]()
         Alamofire.request(url).response { response in
-            
+        
             if let data = response.data {
                 
                 let json = JSON(data)
-                //  print("JSON: \(json)")
                 let teams = json[Constants.TEAMS].arrayValue
-                
                 for team in teams {
                     let id = team[Constants.idTeam].stringValue
                     let name = team[Constants.strTeam].stringValue

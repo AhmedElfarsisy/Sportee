@@ -12,15 +12,14 @@ class LeaguePresenter :  LeaguePresenterProtocol {
     
     var leagueRepo :LeagueRepoProtocol?
     
+    let favoritLeague = FavoriteLeagueDao.shared
+    
     func featchLeagues(name :String) {
         print("featchLeagues")
         leagueRepo?.getLeagues(sportName: name, completionHandler: { (leagues) in
             self.view?.leaguesList = leagues
             var myLea : [League]?
             myLea = leagues
-            print("//////////////////////////////////////////")
-            //print("league"+(myLea![1].strLeague))
-            
         }, onFailure: { (error) in
             self.view?.error = error
             
@@ -36,6 +35,9 @@ class LeaguePresenter :  LeaguePresenterProtocol {
            reloader()
        }
     
+     func addLeague(league: League) {
+        
+        favoritLeague.saveLeague(league: league)
+     }
     
-
 }

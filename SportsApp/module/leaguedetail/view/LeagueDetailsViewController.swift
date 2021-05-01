@@ -13,7 +13,10 @@ import RxSwift
 class LeagueDetailsViewController: UIViewController , LeagueDetailsProtocol ,UICollectionViewDelegateFlowLayout{
     //MARK:-properties
     var leagueId :String?
+    var league : League?
     var presenter : LeagueDetailPresenterProtocol?
+    var index :String?
+    
     var upComingEvents : [Events]?
     {
         didSet {
@@ -33,7 +36,7 @@ class LeagueDetailsViewController: UIViewController , LeagueDetailsProtocol ,UIC
         }
     }
     
-
+    
     var teamsList: [Teams]?
     {
         didSet {
@@ -48,13 +51,18 @@ class LeagueDetailsViewController: UIViewController , LeagueDetailsProtocol ,UIC
     var lastEventDriver: Driver<[Events]>?
     private var dataSubjectLastEvents = PublishSubject<[Events]>()
     var teamsDriver: Driver<[Teams]>?
-       private var dataSubjectTeams = PublishSubject<[Teams]>()
+    private var dataSubjectTeams = PublishSubject<[Teams]>()
     @IBOutlet weak var upComingEventsCollectionView: UICollectionView!
     @IBOutlet weak var lastEventsCollectionView: UICollectionView!
     @IBOutlet weak var teamsCollectionView: UICollectionView!
+    
+    @IBOutlet weak var favoritBtn: UIButton!
+    
+    var favFlage : Bool = false
+    
     var error : String?
     let disposeBag = DisposeBag()
-
+    
     
     //MARK:-Methods
     override func viewDidLoad() {
@@ -69,12 +77,20 @@ class LeagueDetailsViewController: UIViewController , LeagueDetailsProtocol ,UIC
         }
         upComingEventsDeiver = dataSubject.asDriver(onErrorJustReturn: [])
         lastEventDriver = dataSubjectLastEvents.asDriver(onErrorJustReturn:[] )
-           teamsDriver = dataSubjectTeams.asDriver(onErrorJustReturn:[] )
+        teamsDriver = dataSubjectTeams.asDriver(onErrorJustReturn:[] )
         
         
         observeOnData()
         observeLastEventsData()
         observeOnTeamsData()
+        if let league = league {
+        
+            if FavoriteLeagueDao.shared.isFovorite(leagueId: league.idLeague ){
+              favoritBtn.setImage( UIImage(named: "Saved.png"), for: .normal)
+        }
+        else {
+             favoritBtn.setImage( UIImage(named: "SavedEmp.png"), for: .normal)
+            }}
     }
     
     func prepareObservale() {
@@ -85,15 +101,15 @@ class LeagueDetailsViewController: UIViewController , LeagueDetailsProtocol ,UIC
     }
     
     func prepareObservaleForLastResult() {
-          if let lastResultsList = lastResultsList {
-              self.dataSubjectLastEvents.onNext(lastResultsList)
-          }
-      }
+        if let lastResultsList = lastResultsList {
+            self.dataSubjectLastEvents.onNext(lastResultsList)
+        }
+    }
     
     func prepareObservaleForTeams()  {
         if let teamsList = teamsList {
-                     self.dataSubjectTeams.onNext(teamsList)
-                 }
+            self.dataSubjectTeams.onNext(teamsList)
+        }
     }
     
     func observeOnData() {
@@ -108,7 +124,7 @@ class LeagueDetailsViewController: UIViewController , LeagueDetailsProtocol ,UIC
         }.disposed(by: self.disposeBag)
         
     }
-
+    
     func observeLastEventsData ()  {
         lastEventDriver?.drive(self.lastEventsCollectionView.rx.items(cellIdentifier: "lastEvents")){row,item,cell in
             (cell as? LastEventsCell)?.homeTeam!.text = item.strHomeTeam
@@ -121,17 +137,17 @@ class LeagueDetailsViewController: UIViewController , LeagueDetailsProtocol ,UIC
         }.disposed(by: self.disposeBag)
     }
     func observeOnTeamsData() {
-         teamsDriver?.drive(self.teamsCollectionView.rx.items(cellIdentifier: "teamsCell")){row,item,cell in
-             (cell as? TeamsCell)?.teamName.text = item.strTeam
-             
-             (cell as? TeamsCell)?.teamImage!.sd_setImage(with: URL(string:item.strTeamBadge!), placeholderImage: UIImage(named: "sport.png"))
-             
+        teamsDriver?.drive(self.teamsCollectionView.rx.items(cellIdentifier: "teamsCell")){row,item,cell in
+            (cell as? TeamsCell)?.teamName.text = item.strTeam
+            
+            (cell as? TeamsCell)?.teamImage!.sd_setImage(with: URL(string:item.strTeamBadge!), placeholderImage: UIImage(named: "sport.png"))
+            self.index = item.idTeam!
             (cell as? TeamsCell)?.teamImage.layer.cornerRadius = ((cell as? TeamsCell)?.teamImage.frame.width)! / 2.0
-             
-         }.disposed(by: self.disposeBag)
-         
-     }
-    
+            
+        }.disposed(by: self.disposeBag)
+        
+    }
+
     
     func mangeDependancies()  {
         let apiRequest = APIRequest.instance
@@ -152,14 +168,27 @@ class LeagueDetailsViewController: UIViewController , LeagueDetailsProtocol ,UIC
         return CGSize(width: cellWidth, height: cellHight)
     }
     
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destination.
-     // Pass the selected object to the new view controller.
-     }
-     */
+        override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    
+            var teamDetails :TeamDetailsViewController = segue.destination as! TeamDetailsViewController
+            if let index = index{
+                
+                for item in teamsList! {
+                    if index == item.idTeam {
+                       teamDetails.team = item
+                    }
+                }
+              
+            }
+    
+        }
+    
+    @IBAction func addFavorit(_ sender: Any) {
+        if let league = league{
+            presenter?.addLeague(league:league )
+            favoritBtn.setImage( UIImage(named: "Saved.png"), for: .normal)
+
+    }
+    }
     
 }

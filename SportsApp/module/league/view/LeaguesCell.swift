@@ -9,16 +9,31 @@
 import UIKit
 
 class LeaguesCell: UITableViewCell {
-
     
+    var youtubeStr:String = ""
+    var league: League?
     @IBOutlet weak var leagueImage: UIImageView!
     
     @IBOutlet weak var leagueName: UILabel!
-   
-    @IBAction func youtubeURLBtn(_ sender: UIButton) {
-        print("Youtube URL")
-    }
-   
     
-
+    @IBOutlet weak var youtubeBtn: UIButton!
+    
+    
+    @IBOutlet weak var favBtn: UIButton!
+    
+    @IBAction func goToTrailer(_ sender: UIButton) {
+        if youtubeStr != "" {
+            UIApplication.shared.open(NSURL(string: "https://\(youtubeStr)")! as URL, options: [:], completionHandler: nil)
+        }else{
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "displayNoLink"), object: youtubeStr)
+        }
+    }
+    @IBAction func addFavorit(_ sender: UIButton) {
+        if let league = league{
+            
+            LeaguePresenter().addLeague(league: league)
+            }
+        }
+        
+    
 }
