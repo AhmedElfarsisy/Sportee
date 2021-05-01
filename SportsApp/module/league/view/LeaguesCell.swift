@@ -12,6 +12,7 @@ class LeaguesCell: UITableViewCell {
     
     var youtubeStr:String = ""
     var league: League?
+    var showAlerts : ()->Void = {}
     @IBOutlet weak var leagueImage: UIImageView!
     
     @IBOutlet weak var leagueName: UILabel!
@@ -29,10 +30,7 @@ class LeaguesCell: UITableViewCell {
         }
     }
     @IBAction func addFavorit(_ sender: UIButton) {
-        if let league = league{
-            
-            LeaguePresenter().addLeague(league: league)
-            }
+       showAlerts()
         }
         
     

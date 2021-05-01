@@ -263,7 +263,7 @@
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y1V-we-OQU">
                                                             <rect key="frame" x="0.0" y="24.5" width="62" height="24.5"/>
                                                             <color key="tintColor" red="0.98823529409999999" green="0.73333333329999995" blue="0.054901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                            <state key="normal" image="heart.fill" catalog="system">
+                                                            <state key="normal" image="SavedEmp.png">
                                                                 <color key="titleColor" red="0.98823529409999999" green="0.73333333329999995" blue="0.054901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             </state>
                                                             <connections>
@@ -761,6 +761,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="SavedEmp.png" width="19" height="16.5"/>
         <image name="date-solid.png" width="12.5" height="12"/>
         <image name="heart" catalog="system" width="128" height="109"/>
         <image name="heart.fill" catalog="system" width="128" height="109"/>

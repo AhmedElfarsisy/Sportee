@@ -24,20 +24,25 @@ class LeaguePresenter :  LeaguePresenterProtocol {
             self.view?.error = error
             
         })
-    
+        
     }
     
     func attachView(view: LeaguesViewController) {
         self.view = view
     }
-  
-    func updateView(reloader : ()-> Void)  {
-           reloader()
-       }
     
-     func addLeague(league: League) {
-        
-        favoritLeague.saveLeague(league: league)
-     }
+    func updateView(reloader : ()-> Void)  {
+        reloader()
+    }
+    
+    func addLeague(league: League) {
+        if !favoritLeague.isFovorite(leagueId: league.idLeague){
+            favoritLeague.saveLeague(league: league)}
+        else {
+            if let view = view {
+                Helper().showAlert(message: "This League is Already Favorit", view: view)  
+            }
+        }
+    }
     
 }

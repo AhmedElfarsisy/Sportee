@@ -35,7 +35,7 @@ class LeaguesViewController: UIViewController , UITableViewDelegate , UITableVie
         mangeDependancies()
         presenter?.attachView(view: self)
         presenter?.featchLeagues(name: sportName!)
-       
+        
         
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -60,7 +60,7 @@ class LeaguesViewController: UIViewController , UITableViewDelegate , UITableVie
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-     
+        
         print(leaguesList?.count )
         return leaguesList?.count ?? 0
     }
@@ -69,24 +69,31 @@ class LeaguesViewController: UIViewController , UITableViewDelegate , UITableVie
         let cell = tableView.dequeueReusableCell(withIdentifier: "LeagueCell", for: indexPath) as! LeaguesCell
         cell.leagueName.text = leaguesList![indexPath.row].strLeague
         cell.leagueImage.layer.cornerRadius = cell.leagueImage.frame.width / 2.0
-
+        
         let imageUrl = leaguesList?[indexPath.row].strBadge
         cell.leagueImage!.sd_setImage(with: URL(string:imageUrl!), placeholderImage: UIImage(named: "sport.png"))
         cell.league = leaguesList![indexPath.row]
         cell.youtubeStr = leaguesList![indexPath.row].strYoutube ?? ""
-               NotificationCenter.default.addObserver(self, selector: #selector(displayNoLink), name: NSNotification.Name(rawValue: "displayNoLink"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(displayNoLink), name: NSNotification.Name(rawValue: "displayNoLink"), object: nil)
+        cell.showAlerts = {
+            if FavoriteLeagueDao.shared.isFovorite(leagueId: self.leaguesList![indexPath.row].idLeague) {
+                Helper().showAlert(message: "This League Already Exist", view: self)
+            }
+            LeaguePresenter().addLeague(league: self.leaguesList![indexPath.row])
+            cell.favBtn.setImage(UIImage(named: "Saved"), for: .normal)
+        }
         return cell
     }
     
     @objc func displayNoLink(){
-                     let alert : UIAlertController = UIAlertController(title: "Alert", message: "Sorry! Link Not Found", preferredStyle: .alert)
-                     alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
-                         print("ok")
-                     }))
-                     self.present(alert, animated: true, completion: nil)
-     }
+        let alert : UIAlertController = UIAlertController(title: "Alert", message: "Sorry! Link Not Found", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+            print("ok")
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
     
-   
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let leagueDetailsViewController = storyBoard.instantiateViewController(withIdentifier: "leagueDetailsViewController") as! LeagueDetailsViewController
@@ -95,7 +102,7 @@ class LeaguesViewController: UIViewController , UITableViewDelegate , UITableVie
         self.present(leagueDetailsViewController, animated: true, completion: nil)
     }
     
-
+    
     
 }
 
@@ -103,5 +110,5 @@ extension LeaguesViewController  {
     
     
     
-  
+    
 }
