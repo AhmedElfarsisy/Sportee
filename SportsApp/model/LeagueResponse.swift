@@ -16,9 +16,15 @@ struct LeagueResponse {
 
 // MARK: - League
 struct League {
-    let idLeague, strLeague: String
-    let strSport: StrSport
-    let strLeagueAlternate: String?
+    
+    let idLeague: String
+    let strLeague : String
+    let strBadge :String
+    let strYoutube: String
+    let strDivision: String
+//    let idLeague, strLeague: String
+//    let strSport: StrSport
+//    let strLeagueAlternate: String?
 }
 
 enum StrSport {

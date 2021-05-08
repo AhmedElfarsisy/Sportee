@@ -7,3 +7,12 @@
 //
 
 import Foundation
+
+protocol  FavoritePresenterProtocol {
+    //var sportsRepo :SportsRepoProtocol?
+    func featchfavorits()-> [League]
+    func attachView (view : FavoritsViewController)
+    func updateFavoritView(reloader : ()-> Void)
+     func deleteLeague(league : League)
+}
+

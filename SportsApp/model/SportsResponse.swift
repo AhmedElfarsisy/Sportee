@@ -15,8 +15,9 @@ struct SportsResponse  {
 
 // MARK: - Sport
 struct Sport {
-    let idSport, strSport: String
-    let strFormat: StrFormat
+    let idSpor :Int
+    let  strSport: String
+    let strFormat: String
     let strSportThumb, strSportThumbGreen: String
     let strSportDescription: String
 }
